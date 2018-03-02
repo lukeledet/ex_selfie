@@ -66,4 +66,16 @@ defmodule Selfie do
   defp handle_undefined(struct, name, [], _), do: Map.fetch!(struct, name)
 
   defp handle_undefined(_, _, _, error), do: raise(error)
+
+  defmacro defobject(params) do
+    quote do
+      defstruct unquote(params ++ [self: nil])
+
+      def new(params \\ %{}) do
+        struct = struct(__MODULE__, params)
+
+        Map.put(struct, :self, &(Selfie.self_apply(struct, &1, &2)))
+      end
+    end
+  end
 end

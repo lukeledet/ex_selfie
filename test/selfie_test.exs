@@ -3,7 +3,7 @@ defmodule SelfieTest do
   import Selfie
 
   defmodule Pair do
-    defstruct x: 3, y: 4
+    defobject x: 3, y: 4
 
     def sum(%Pair{x: x, y: y}), do: x + y
 
@@ -28,5 +28,9 @@ defmodule SelfieTest do
     assert_raise FunctionClauseError, fn ->
       %Pair{x: 1, y: 1} |> self_apply(:foo, :bar)
     end
+  end
+
+  test "adds a new function that gives access to Selfie.self_apply/2" do
+    assert Pair.new().self.(:sum, [])
   end
 end
